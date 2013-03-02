@@ -46,7 +46,8 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\GUI\CrossHairScript.cs" />
      <Compile Include="Assets\Scripts\GUI\InteractScript.cs" />
-     <Compile Include="Assets\Scripts\InteractObjectScript.cs" />
+     <Compile Include="Assets\Scripts\InteractObject\I_Test.cs" />
+     <Compile Include="Assets\Scripts\InteractObject\InteractObjectScript.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">

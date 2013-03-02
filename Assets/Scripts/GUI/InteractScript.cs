@@ -5,8 +5,9 @@ public class InteractScript : MonoBehaviour {
 	
 	private CrossHairScript crossHairScript;
 	
-	public GameObject target;
-	public string interactMethod = "Interact";
+	public float maxDistance = 5;
+	public InteractObjectScript target;
+	//public string interactMethod = "Interact";
 	
 	// Use this for initialization
 	void Start () {
@@ -18,18 +19,38 @@ public class InteractScript : MonoBehaviour {
 		RaycastHit hit;
 		Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width*0.5f, Screen.height*0.5f));
 		
-		target = null;
-		crossHairScript.current = 0;
+		//target = null;
+		//crossHairScript.current = 0;
 		
-		if (Physics.Raycast(ray, out hit)) {
-			target = hit.collider.gameObject;			
-			InteractObjectScript interactObject = target.GetComponent<InteractObjectScript>();
-			if (interactObject){
-			
-				crossHairScript.current = 1;	
-				if(Input.GetMouseButton(0)){
-					target.BroadcastMessage(interactMethod, null, SendMessageOptions.DontRequireReceiver);
+		bool found = false;
+		if (Physics.Raycast(ray, out hit, maxDistance)) {
+			GameObject obj = hit.collider.gameObject;			
+			InteractObjectScript interact = obj.GetComponent<InteractObjectScript>();
+			if (interact){
+				found = true;
+				if(target != interact){
+					if(target) target._OnExit();
+					target = interact;
+					target._OnEnter();
 				}
+				
+			
+				//crossHairScript.current = 1;
+				crossHairScript.setCursor("over");
+				
+				if(Input.GetMouseButtonDown(0)){
+					//target.BroadcastMessage(interactMethod, null, SendMessageOptions.DontRequireReceiver);
+					target._OnClick();
+				}
+			}
+		}
+		
+		if(!found){
+			if(target){
+				target._OnExit();
+				target = null;
+				
+				crossHairScript.current = 0;
 			}
 		}
 	}
